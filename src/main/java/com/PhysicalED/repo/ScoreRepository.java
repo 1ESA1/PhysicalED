@@ -1,16 +1,17 @@
 package com.PhysicalED.repo;
-
 import com.PhysicalED.model.Score;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-
+/**
+ * Repository class for managing Score entities in the database.
+ * Provides CRUD operations and custom queries.
+ */
 public class ScoreRepository {
     private final EntityManager em; // EntityManager for database operations
 
     public ScoreRepository(EntityManager em) {
         this.em = em;
     }
-
     // Method CRUD operations (Create, Read, Update, Delete)
     // Create a new Score salving it to the database
     public void save(Score score) {
@@ -44,5 +45,18 @@ public class ScoreRepository {
             em.remove(score);
         }
         em.getTransaction().commit(); // Commit the transaction
+    }
+
+    // Custom query methods
+    public List<Score> findByStudentId(Long studentId) {
+        return em.createQuery(
+                "SELECT s FROM Score s WHERE s.student.id = :studentId", Score.class
+        ).setParameter("studentId", studentId).getResultList();
+    }
+
+    public List<Score> findByTestDisciplineId(Long testId) {
+        return em.createQuery(
+                "SELECT s FROM Score s WHERE s.testDiscipline.id = :testId", Score.class
+        ).setParameter("testId", testId).getResultList();
     }
 }

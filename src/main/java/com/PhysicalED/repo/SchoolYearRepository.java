@@ -1,16 +1,17 @@
 package com.PhysicalED.repo;
-
 import com.PhysicalED.model.SchoolYear;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-
+/**
+ * Repository class for managing SchoolYear entities.
+ * Provides CRUD operations to interact with the database.
+ */
 public class SchoolYearRepository {
     private final EntityManager em; // EntityManager for database operations
 
     public SchoolYearRepository(EntityManager em) {
         this.em = em;
     }
-
     // Method CRUD operations (Create, Read, Update, Delete)
     // Create a new SchoolYear salving it to the database
     public void save(SchoolYear schoolYear) {

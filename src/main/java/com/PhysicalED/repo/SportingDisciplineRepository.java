@@ -1,16 +1,17 @@
 package com.PhysicalED.repo;
-
 import com.PhysicalED.model.SportingDiscipline;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-
+/**
+ * Repository class for managing SportingDiscipline entities.
+ * Provides CRUD operations to interact with the database.
+ */
 public class SportingDisciplineRepository {
     private final EntityManager em; // EntityManager for database operations
 
     public SportingDisciplineRepository(EntityManager em) {
         this.em = em;
     }
-
     // Method CRUD operations (Create, Read, Update, Delete)
     // Create a new SportingDiscipline saving it to the database
     public void save(SportingDiscipline sportingDiscipline) {

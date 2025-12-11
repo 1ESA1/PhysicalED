@@ -1,7 +1,8 @@
 package com.PhysicalED.model;
-
 import jakarta.persistence.*;
-
+/**
+ * ClassSection entity representing a class section in the school system.
+ */
 @Entity
 @Table(name = "class_section") // Table name in the db
 
@@ -19,8 +20,7 @@ public class ClassSection {
 
     // Constructor
     public ClassSection() {}
-    public ClassSection(Long id, String name, SchoolYear schoolYear) {
-        this.id = id;
+    public ClassSection(String name, SchoolYear schoolYear) {
         this.name = name;
         this.schoolYear = schoolYear;
     }

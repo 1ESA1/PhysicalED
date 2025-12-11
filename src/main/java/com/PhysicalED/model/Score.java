@@ -1,7 +1,9 @@
 package com.PhysicalED.model;
-
 import jakarta.persistence.*;
 
+/**
+ * Score entity representing a student's score in a specific test discipline.
+ */
 @Entity
 @Table(name = "score") // Table name in the db
 
@@ -23,8 +25,7 @@ public class Score {
 
     // Constructor
     public Score() {}
-    public Score(Long id,TestDiscipline testDiscipline, Student student, Double value) {
-        this.id = id;
+    public Score(TestDiscipline testDiscipline, Student student, Double value) {
         this.testDiscipline = testDiscipline;
         this.student = student;
         this.value = value;

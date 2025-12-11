@@ -1,16 +1,17 @@
 package com.PhysicalED.repo;
-
 import com.PhysicalED.model.Student;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-
+/**
+ * Repository class for managing Student entities in the database.
+ * Provides CRUD operations and custom queries.
+ */
 public class StudentRepository {
     private final EntityManager em; // EntityManager for database operations
 
     public StudentRepository(EntityManager em) {
         this.em = em;
     }
-
     // Method CRUD operations (Create, Read, Update, Delete)
     // Create a new Student saving it to the database
     public void save(Student student) {
@@ -44,5 +45,12 @@ public class StudentRepository {
             em.remove(student);
         }
         em.getTransaction().commit();
+    }
+
+    // Find Students by ClassSection ID
+    public List<Student> findByClassSectionId(Long classSectionId) {
+        return em.createQuery(
+                "SELECT s FROM Student s WHERE s.classSection.id = :classSectionId", Student.class
+        ).setParameter("classSectionId", classSectionId).getResultList();
     }
 }

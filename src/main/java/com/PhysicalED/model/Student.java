@@ -1,7 +1,8 @@
 package com.PhysicalED.model;
-
 import jakarta.persistence.*;
-
+/**
+ * Student Entity representing a student in the Physical Education system.
+ */
 @Entity
 @Table(name = "student") // Table name in the db
 
@@ -10,10 +11,10 @@ public class Student {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (length = 30)
+    @Column (name = "firstname", length = 30, nullable = false)
     private String firstName;
 
-    @Column (length = 30)
+    @Column (name = "lastname",length = 30, nullable = false)
     private String lastName;
 
     @ManyToOne
@@ -22,8 +23,11 @@ public class Student {
 
     //Constructor
     public Student() {}
-    public Student(Long id, String firstName, String lastName, ClassSection classSection) {
-        this.id = id;
+    public Student(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    public Student(String firstName, String lastName, ClassSection classSection) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.classSection = classSection;

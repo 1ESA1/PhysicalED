@@ -1,7 +1,8 @@
 package com.PhysicalED.model;
-
 import jakarta.persistence.*;
-
+/**
+ * Entity class representing a School Year.
+ */
 @Entity
 @Table(name = "school_year") // Table name in the database
 
@@ -15,8 +16,7 @@ public class SchoolYear {
 
     // Constructor
     public SchoolYear() {}
-    public SchoolYear(Long id, String description) {
-        this.id = id;
+    public SchoolYear(String description) {
         this.description = description;
     }
 

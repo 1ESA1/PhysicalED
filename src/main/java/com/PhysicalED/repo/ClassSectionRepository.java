@@ -1,16 +1,17 @@
 package com.PhysicalED.repo;
-
 import com.PhysicalED.model.ClassSection;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-
+/**
+ * Repository class for managing ClassSection entities.
+ * Provides CRUD operations and custom queries.
+ */
 public class ClassSectionRepository {
     private final EntityManager em; // EntityManager for database operations
 
     public ClassSectionRepository(EntityManager em) {
         this.em = em;
     }
-
     // Method CRUD operations (Create, Read, Update, Delete)
     // Create a new ClassSection saving it to the database
     public void save(ClassSection classSection) {
@@ -44,5 +45,13 @@ public class ClassSectionRepository {
             em.remove(classSection);
         }
         em.getTransaction().commit();
+    }
+
+    // Find ClassSections by School Year
+    public List<ClassSection> findBySchoolYearId(Long schoolYearId) {
+        return em.createQuery(
+                "SELECT c FROM ClassSection c WHERE c.schoolYear.id = :schoolYearId",
+                ClassSection.class
+        ).setParameter("schoolYearId", schoolYearId).getResultList();
     }
 }

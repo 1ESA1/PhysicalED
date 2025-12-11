@@ -1,7 +1,8 @@
 package com.PhysicalED.model;
-
 import jakarta.persistence.*;
-
+/**
+ * Entity representing a sporting discipline.
+ */
 @Entity
 @Table(name = "sporting_discipline")
 
@@ -15,8 +16,7 @@ public class SportingDiscipline {
 
     // Constructor
     public SportingDiscipline() {}
-    public SportingDiscipline(Long id, String description) {
-        this.id = id;
+    public SportingDiscipline(String description) {
         this.description = description;
     }
 
@@ -24,7 +24,6 @@ public class SportingDiscipline {
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -32,7 +31,6 @@ public class SportingDiscipline {
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
