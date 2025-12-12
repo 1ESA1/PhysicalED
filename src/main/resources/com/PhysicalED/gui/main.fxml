@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.PhysicalED.gui.MainController">
+    <top>
+        <Label text="Physical Education App"
+               style="-fx-font-size: 18;"
+               BorderPane.alignment="CENTER"/>
+    </top>
+    <left>
+        <VBox spacing="12" style="-fx-background-color: #eeeeee; -fx-padding: 12;">
+            <Button fx:id="btnYears" text="Anni scolastici"/>
+            <Button fx:id="btnClasses" text="Classi"/>
+            <Button fx:id="btnStudents" text="Studenti"/>
+            <Button fx:id="btnSport" text="Sport"/>
+            <Button fx:id="btnScore" text="Score"/>
+        </VBox>
+    </left>
+    <center>
+        <StackPane fx:id="mainPanel">
+            <Label fx:id="lblWelcome" text="Benvenuto su PhysicalED!" />
+        </StackPane>
+    </center>
+</BorderPane>
