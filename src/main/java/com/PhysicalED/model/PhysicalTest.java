@@ -2,20 +2,20 @@ package com.PhysicalED.model;
 import jakarta.persistence.*;
 /**
  * Entity representing a Test Discipline in the Physical Education system.
- * It includes details about the sporting discipline, class section,
+ * It includes details about the sport category, class section,
  * test date, and description.
  */
 @Entity
 @Table(name = "test_discipline")
 
-public class TestDiscipline {
+public class PhysicalTest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "sporting_discipline_id", nullable = false)
-    private SportingDiscipline sportingDiscipline;
+    @JoinColumn(name = "sport_category_id", nullable = false)
+    private SportCategory sportCategory;
 
     @ManyToOne
     @JoinColumn(name = "class_section_id", nullable = false)
@@ -28,12 +28,12 @@ public class TestDiscipline {
     private String description;
 
     // Contructor
-    public TestDiscipline() {}
-    public TestDiscipline(SportingDiscipline sportingDiscipline,
-                          ClassSection classSection,
-                          java.sql.Date testDate,
-                          String description) {
-        this.sportingDiscipline = sportingDiscipline;
+    public PhysicalTest() {}
+    public PhysicalTest(SportCategory sportCategory,
+                        ClassSection classSection,
+                        java.sql.Date testDate,
+                        String description) {
+        this.sportCategory = sportCategory;
         this.classSection = classSection;
         this.testDate = testDate;
         this.description = description;
@@ -47,11 +47,11 @@ public class TestDiscipline {
         this.id = id;
     }
 
-    public SportingDiscipline getSportingDiscipline() {
-        return sportingDiscipline;
+    public SportCategory getSportCategory() {
+        return sportCategory;
     }
-    public void setSportingDiscipline(SportingDiscipline sportingDiscipline) {
-        this.sportingDiscipline = sportingDiscipline;
+    public void setSportCategory(SportCategory sportCategory) {
+        this.sportCategory = sportCategory;
     }
 
     public ClassSection getClassSection() {

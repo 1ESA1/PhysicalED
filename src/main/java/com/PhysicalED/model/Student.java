@@ -17,19 +17,25 @@ public class Student {
     @Column (name = "lastname",length = 30, nullable = false)
     private String lastName;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", length = 1, nullable = false)
+    private Gender gender;
+
     @ManyToOne
     @JoinColumn(name = "class_section_id", nullable = false)
     private ClassSection classSection;
 
     //Constructor
-    public Student() {}
-    public Student(String firstName, String lastName) {
+    public Student(String name, String surname) {}
+    public Student(String firstName, String lastName, Gender gender) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.gender = gender;
     }
-    public Student(String firstName, String lastName, ClassSection classSection) {
+    public Student(String firstName, String lastName, Gender gender, ClassSection classSection) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.gender = gender;
         this.classSection = classSection;
     }
 
@@ -53,6 +59,13 @@ public class Student {
     }
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     public ClassSection getClassSection() {

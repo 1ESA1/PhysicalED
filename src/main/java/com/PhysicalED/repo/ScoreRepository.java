@@ -54,9 +54,9 @@ public class ScoreRepository {
         ).setParameter("studentId", studentId).getResultList();
     }
 
-    public List<Score> findByTestDisciplineId(Long testId) {
+    public List<Score> findByPhysicalTestId(Long testId) {
         return em.createQuery(
-                "SELECT s FROM Score s WHERE s.testDiscipline.id = :testId", Score.class
+                "SELECT s FROM Score s WHERE s.physicalTest.id = :testId", Score.class
         ).setParameter("testId", testId).getResultList();
     }
 }

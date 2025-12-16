@@ -14,7 +14,7 @@ public class Score {
 
     @ManyToOne
     @JoinColumn(name = "test_discipline_id", nullable = false)
-    private TestDiscipline testDiscipline;
+    private PhysicalTest physicalTest;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
@@ -25,8 +25,8 @@ public class Score {
 
     // Constructor
     public Score() {}
-    public Score(TestDiscipline testDiscipline, Student student, Double value) {
-        this.testDiscipline = testDiscipline;
+    public Score(PhysicalTest physicalTest, Student student, Double value) {
+        this.physicalTest = physicalTest;
         this.student = student;
         this.value = value;
     }
@@ -39,11 +39,11 @@ public class Score {
         this.id = id;
     }
 
-    public TestDiscipline getTestDiscipline() {
-        return testDiscipline;
+    public PhysicalTest getTestDiscipline() {
+        return physicalTest;
     }
-    public void setTestDiscipline(TestDiscipline testDiscipline) {
-        this.testDiscipline = testDiscipline;
+    public void setTestDiscipline(PhysicalTest physicalTest) {
+        this.physicalTest = physicalTest;
     }
 
     public Student getStudent() {

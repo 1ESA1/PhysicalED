@@ -1,12 +1,12 @@
 package com.PhysicalED.model;
 import jakarta.persistence.*;
 /**
- * Entity representing a sporting discipline.
+ * Entity representing a sport category.
  */
 @Entity
-@Table(name = "sporting_discipline")
+@Table(name = "sport_category")
 
-public class SportingDiscipline {
+public class SportCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,8 +15,8 @@ public class SportingDiscipline {
     private String description;
 
     // Constructor
-    public SportingDiscipline() {}
-    public SportingDiscipline(String description) {
+    public SportCategory() {}
+    public SportCategory(String description) {
         this.description = description;
     }
 

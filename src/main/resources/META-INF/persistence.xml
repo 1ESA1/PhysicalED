@@ -9,8 +9,8 @@
         <class>com.PhysicalED.model.SchoolYear</class>
         <class>com.PhysicalED.model.ClassSection</class>
         <class>com.PhysicalED.model.Student</class>
-        <class>com.PhysicalED.model.SportingDiscipline</class>
-        <class>com.PhysicalED.model.TestDiscipline</class>
+        <class>com.PhysicalED.model.SportCategory</class>
+        <class>com.PhysicalED.model.PhysicalTest</class>
         <class>com.PhysicalED.model.Score</class>
 
         <properties>

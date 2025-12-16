@@ -1,6 +1,5 @@
 package com.PhysicalED.gui;
 
-import com.PhysicalED.model.SportingDiscipline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

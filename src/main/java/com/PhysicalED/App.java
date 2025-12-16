@@ -18,9 +18,9 @@ public class App {
         ClassSectionRepository classSectionRepo = new ClassSectionRepository(em);
         SchoolYearRepository schoolYearRepo = new SchoolYearRepository(em);
         ScoreRepository scoreRepo = new ScoreRepository(em);
-        SportingDisciplineRepository sportingDisciplineRepo = new SportingDisciplineRepository(em);
+        SportCategoryRepository sportCategoryRepo = new SportCategoryRepository(em);
         StudentRepository studentRepo = new StudentRepository(em);
-        TestDisciplineRepository testDisciplineRepo = new TestDisciplineRepository(em);
+        PhysicalTestRepository physicalTestRepo = new PhysicalTestRepository(em);
 
         // Menu Principale per interazione con l'utente
         Scanner scanner = new Scanner(System.in);
@@ -50,7 +50,7 @@ public class App {
                     menuClassi(scanner,
                                classSectionRepo,
                                studentRepo,
-                               testDisciplineRepo,
+                               physicalTestRepo,
                                schoolYearRepo);
                     break;
                 case 3:
@@ -61,13 +61,13 @@ public class App {
                     break;
                 case 4:
                     menuDisciplineSportive(scanner,
-                                           sportingDisciplineRepo,
-                                           testDisciplineRepo);
+                                           sportCategoryRepo,
+                                           physicalTestRepo);
                     break;
                 case 5:
                     menuTestFisici(scanner,
-                                   testDisciplineRepo,
-                                   sportingDisciplineRepo,
+                                   physicalTestRepo,
+                                   sportCategoryRepo,
                                    classSectionRepo,
                                    scoreRepo);
                     break;
@@ -75,13 +75,13 @@ public class App {
                     menuPunteggiDiscipline(scanner,
                                            scoreRepo,
                                            studentRepo,
-                                           testDisciplineRepo);
+                                           physicalTestRepo);
                     break;
                 case 7:
                     menuStatistichePunteggi(scanner,
                                             scoreRepo,
                                             studentRepo,
-                                            testDisciplineRepo);
+                                            physicalTestRepo);
                     break;
                 case 0:
                     running = false;
@@ -160,7 +160,7 @@ public class App {
     private static void menuClassi(Scanner scanner,
                                    ClassSectionRepository classSectionRepo,
                                    StudentRepository studentRepo,
-                                   TestDisciplineRepository testDisciplineRepo,
+                                   PhysicalTestRepository physicalTestRepo,
                                    SchoolYearRepository schoolYearRepo) {
         boolean running = true;
         while (running) {
@@ -224,8 +224,8 @@ public class App {
                         System.out.println("Non puoi eliminare questa classe: esistono studenti collegati!");
                         break;
                     }
-                    // Controllo TestDiscipline collegati
-                    List<TestDiscipline> testCollegati = testDisciplineRepo.findByClassSectionId(idToDel);
+                    // Controllo PhysicalTest collegati
+                    List<PhysicalTest> testCollegati = physicalTestRepo.findByClassSectionId(idToDel);
                     if (!testCollegati.isEmpty()) {
                         System.out.println("Non puoi eliminare questa classe: esistono test fisici collegati!");
                         break;
@@ -332,8 +332,8 @@ public class App {
 
     // Sotto-menù per Discipline Sportive
     private static void menuDisciplineSportive(Scanner scanner,
-                                               SportingDisciplineRepository repo,
-                                               TestDisciplineRepository testDisciplineRepo) {
+                                               SportCategoryRepository repo,
+                                               PhysicalTestRepository physicalTestRepo) {
         boolean running = true;
         while (running) {
             System.out.println("----- Gestione Discipline Sportive -----");
@@ -349,13 +349,13 @@ public class App {
                 case 1:
                     System.out.print("Nome disciplina sportiva: ");
                     String nomeDisc = scanner.nextLine();
-                    SportingDiscipline disciplina = new SportingDiscipline();
+                    SportCategory disciplina = new SportCategory();
                     disciplina.setDescription(nomeDisc);
                     repo.save(disciplina);
                     System.out.println("Disciplina aggiunta con successo.");
                     break;
                 case 2:
-                    for (SportingDiscipline d : repo.findAll()) {
+                    for (SportCategory d : repo.findAll()) {
                         System.out.println(d.getId() + ": " + d.getDescription());
                     }
                     break;
@@ -368,8 +368,8 @@ public class App {
                         System.out.println("ID della disciplina non valido.");
                         break;
                     }
-                    // Controllo TestDiscipline collegati
-                    List<TestDiscipline> testCollegati = testDisciplineRepo.findBySportingDisciplineId(idToDel);
+                    // Controllo PhysicalTest collegati
+                    List<PhysicalTest> testCollegati = physicalTestRepo.findBySportCategoryId(idToDel);
                     if (!testCollegati.isEmpty()) {
                         System.out.println("Non puoi eliminare questa disciplina: esistono test fisici collegati!");
                         break;
@@ -392,8 +392,8 @@ public class App {
 
     // Sotto-menù per TestFisici
     private static void menuTestFisici(Scanner scanner,
-                                       TestDisciplineRepository testDisciplineRepo,
-                                       SportingDisciplineRepository sportingDisciplineRepo,
+                                       PhysicalTestRepository testDisciplineRepo,
+                                       SportCategoryRepository sportCategoryRepo,
                                        ClassSectionRepository classSectionRepo,
                                        ScoreRepository scoreRepo) {
         boolean running = true;
@@ -412,7 +412,7 @@ public class App {
                 case 1:
                     // 1. Mostra discipline disponibili
                     System.out.println("Discipline disponibili:");
-                    for (SportingDiscipline d : sportingDisciplineRepo.findAll()) {
+                    for (SportCategory d : sportCategoryRepo.findAll()) {
                         System.out.println(d.getId() + ": " + d.getDescription());
                     }
                     System.out.print("ID disciplina sportiva da collegare: ");
@@ -424,7 +424,7 @@ public class App {
                         break;
                     }
                     // Recupera disciplina
-                    SportingDiscipline disciplina = sportingDisciplineRepo.findById(discId);
+                    SportCategory disciplina = sportCategoryRepo.findById(discId);
                     if (disciplina == null) {
                         System.out.println("Disciplina non trovata!");
                         break;
@@ -456,20 +456,20 @@ public class App {
                     String dateStr = scanner.nextLine();
                     java.sql.Date testDate = java.sql.Date.valueOf(dateStr);
                     // 5. Costruisci l'entità
-                    TestDiscipline test = new TestDiscipline();
+                    PhysicalTest test = new PhysicalTest();
                     test.setDescription(descr);
-                    test.setSportingDiscipline(disciplina);
+                    test.setSportCategory(disciplina);
                     test.setClassSection(sezione);
                     test.setTestDate(testDate);
                     testDisciplineRepo.save(test);
                     System.out.println("Test fisico aggiunto con successo.");
                     break;
                 case 2:
-                    for (TestDiscipline t : testDisciplineRepo.findAll()) {
+                    for (PhysicalTest t : testDisciplineRepo.findAll()) {
                         System.out.println(
                                 t.getId() + ": " +
                                         t.getDescription() + // aggiungi campo description/testName se manca!
-                                        " | Disciplina: " + t.getSportingDiscipline().getDescription() +
+                                        " | Disciplina: " + t.getSportCategory().getDescription() +
                                         " | Classe: " + t.getClassSection().getName() +
                                         " | Data: " + t.getTestDate()
                         );
@@ -485,7 +485,7 @@ public class App {
                         break;
                     }
                     // Controllo Punteggi collegati
-                    List<Score> punteggiCollegati = scoreRepo.findByTestDisciplineId(idToDel);
+                    List<Score> punteggiCollegati = scoreRepo.findByPhysicalTestId(idToDel);
                     if (!punteggiCollegati.isEmpty()) {
                         System.out.println("Non puoi eliminare questo test fisico: esistono punteggi collegati!");
                         break;
@@ -510,7 +510,7 @@ public class App {
     private static void menuPunteggiDiscipline(Scanner scanner,
                                                ScoreRepository scoreRepo,
                                                StudentRepository studentRepo,
-                                               TestDisciplineRepository testDisciplineRepo) {
+                                               PhysicalTestRepository testDisciplineRepo) {
         boolean running = true;
         while (running) {
             System.out.println("----- Gestione Voti dei Test -----");
@@ -538,12 +538,12 @@ public class App {
                     }
                     // 2. SCEGLI TEST FISICO
                     System.out.println("Test Fisici disponibili:");
-                    for (TestDiscipline t : testDisciplineRepo.findAll()) {
+                    for (PhysicalTest t : testDisciplineRepo.findAll()) {
                         System.out.println(t.getId() + ": " + t.getDescription());
                     }
                     System.out.print("ID Test Fisico: ");
                     Long testId = Long.parseLong(scanner.nextLine());
-                    TestDiscipline test = testDisciplineRepo.findById(testId);
+                    PhysicalTest test = testDisciplineRepo.findById(testId);
                     if (test == null) {
                         System.out.println("Test fisico non trovato!");
                         break;
@@ -582,7 +582,7 @@ public class App {
     private static void menuStatistichePunteggi(Scanner scanner,
                                                 ScoreRepository scoreRepo,
                                                 StudentRepository studentRepo,
-                                                TestDisciplineRepository testDisciplineRepo) {
+                                                PhysicalTestRepository testDisciplineRepo) {
         boolean running = true;
         while (running) {
             System.out.println("----- Statistiche e Visualizzazione Voti -----");
@@ -605,7 +605,7 @@ public class App {
                                 "ID: " + s.getId() +
                                         " | Studente: " + s.getStudent().getFirstName() + " " + s.getStudent().getLastName() +
                                         " | Test: " + s.getTestDiscipline().getDescription() +
-                                        " | Disciplina: " + s.getTestDiscipline().getSportingDiscipline().getDescription() +
+                                        " | Disciplina: " + s.getTestDiscipline().getSportCategory().getDescription() +
                                         " | Punteggio: " + s.getValue()
                         );
                     }
@@ -621,8 +621,8 @@ public class App {
                     break;
                 case 3:
                     System.out.println("Medie voti per test:");
-                    for (TestDiscipline test : testDisciplineRepo.findAll()) {
-                        List<Score> voti = scoreRepo.findByTestDisciplineId(test.getId()); // DA AGGIUNGERE IN REPO!
+                    for (PhysicalTest test : testDisciplineRepo.findAll()) {
+                        List<Score> voti = scoreRepo.findByPhysicalTestId(test.getId()); // DA AGGIUNGERE IN REPO!
                         double media = voti.isEmpty() ? 0 :
                                 voti.stream().mapToDouble(Score::getValue).average().orElse(0);
                         System.out.printf("Test %s (ID %d): %.2f\n", test.getDescription(), test.getId(), media);
@@ -643,10 +643,10 @@ public class App {
                     break;
                 case 5:
                     System.out.println("Scegli ID test per vedere tutti i voti:");
-                    for (TestDiscipline test : testDisciplineRepo.findAll())
+                    for (PhysicalTest test : testDisciplineRepo.findAll())
                         System.out.println(test.getId() + ": " + test.getDescription());
                     Long testId = Long.parseLong(scanner.nextLine());
-                    List<Score> votiTest = scoreRepo.findByTestDisciplineId(testId); // DA AGGIUNGERE IN REPO!
+                    List<Score> votiTest = scoreRepo.findByPhysicalTestId(testId); // DA AGGIUNGERE IN REPO!
                     for (Score s : votiTest) {
                         System.out.println(
                                 "Studente: " + s.getStudent().getFirstName() + " " + s.getStudent().getLastName() +
