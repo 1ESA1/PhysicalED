@@ -27,7 +27,7 @@ public class PhysicalTestRepository {
 
     // READ ALL (find all)
     public List<PhysicalTest> findAll() {
-        return em.createQuery("SELECT t FROM physicalTest t", PhysicalTest.class).getResultList();
+        return em.createQuery("SELECT t FROM PhysicalTest t", PhysicalTest.class).getResultList();
     }
 
     // Update an existing PhysicalTest

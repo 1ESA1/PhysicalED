@@ -13,7 +13,7 @@ public class Score {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "test_discipline_id", nullable = false)
+    @JoinColumn(name = "physical_test_id", nullable = false)
     private PhysicalTest physicalTest;
 
     @ManyToOne
@@ -23,12 +23,16 @@ public class Score {
     @Column(nullable = false)
     private Double value;
 
+    @Column(nullable = false)
+    private Integer voto;
+
     // Constructor
     public Score() {}
-    public Score(PhysicalTest physicalTest, Student student, Double value) {
+    public Score(PhysicalTest physicalTest, Student student, Double value, Integer voto) {
         this.physicalTest = physicalTest;
         this.student = student;
         this.value = value;
+        this.voto = voto;
     }
 
     // Getter and Setter
@@ -39,10 +43,10 @@ public class Score {
         this.id = id;
     }
 
-    public PhysicalTest getTestDiscipline() {
+    public PhysicalTest getPhysicalTest() {
         return physicalTest;
     }
-    public void setTestDiscipline(PhysicalTest physicalTest) {
+    public void setPhysicalTest(PhysicalTest physicalTest) {
         this.physicalTest = physicalTest;
     }
 
@@ -58,5 +62,12 @@ public class Score {
     }
     public void setValue(Double value) {
         this.value = value;
+    }
+
+    public Integer getVoto() {
+        return voto;
+    }
+    public void setVoto(Integer voto) {
+        this.voto = voto;
     }
 }

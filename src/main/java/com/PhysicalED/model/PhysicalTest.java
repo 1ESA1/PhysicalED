@@ -6,7 +6,7 @@ import jakarta.persistence.*;
  * test date, and description.
  */
 @Entity
-@Table(name = "test_discipline")
+@Table(name = "physical_test")
 
 public class PhysicalTest {
     @Id

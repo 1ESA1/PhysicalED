@@ -26,7 +26,7 @@ public class Student {
     private ClassSection classSection;
 
     //Constructor
-    public Student(String name, String surname) {}
+    public Student() {}
     public Student(String firstName, String lastName, Gender gender) {
         this.firstName = firstName;
         this.lastName = lastName;

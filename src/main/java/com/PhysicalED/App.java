@@ -1,6 +1,7 @@
 package com.PhysicalED;
 import com.PhysicalED.model.*;
 import com.PhysicalED.repo.*;
+import com.PhysicalED.service.*;
 import jakarta.persistence.*;
 import java.util.Scanner;
 import java.util.List;
@@ -21,6 +22,9 @@ public class App {
         SportCategoryRepository sportCategoryRepo = new SportCategoryRepository(em);
         StudentRepository studentRepo = new StudentRepository(em);
         PhysicalTestRepository physicalTestRepo = new PhysicalTestRepository(em);
+        GradingScaleRepository gradingScaleRepo = new GradingScaleRepository();
+        GradingService gradingService = new GradingService(gradingScaleRepo);
+        ScoreService scoreService = new ScoreService(scoreRepo, gradingService);
 
         // Menu Principale per interazione con l'utente
         Scanner scanner = new Scanner(System.in);
@@ -34,6 +38,7 @@ public class App {
             System.out.println("5. Test Fisici");
             System.out.println("6. Punteggi Discipline Sportive");
             System.out.println("7. Statistiche e Visualizzazioni voti");
+            System.out.println("8. Gestione Fasce di Valutazione");
             System.out.println("0. Esci");
             System.out.print("Seleziona un'opzione: ");
             int choice = scanner.nextInt();
@@ -75,13 +80,17 @@ public class App {
                     menuPunteggiDiscipline(scanner,
                                            scoreRepo,
                                            studentRepo,
-                                           physicalTestRepo);
+                                           physicalTestRepo,
+                                           scoreService, em);
                     break;
                 case 7:
                     menuStatistichePunteggi(scanner,
                                             scoreRepo,
                                             studentRepo,
                                             physicalTestRepo);
+                    break;
+                case 8:
+                    menuFasceValutazione(scanner, gradingScaleRepo, physicalTestRepo, em);
                     break;
                 case 0:
                     running = false;
@@ -269,6 +278,15 @@ public class App {
                     String name = scanner.nextLine();
                     System.out.println("Cognome dello studente: ");
                     String surname = scanner.nextLine();
+                    System.out.println("Genere dello studente (M/F): ");
+                    String gen = scanner.nextLine().trim().toUpperCase();
+                    Gender gender;
+                    try {
+                        gender = Gender.valueOf(gen.equals("F") ? "F" : "M");
+                    } catch (Exception e) {
+                        System.out.println("Genere non valido.");
+                        break;
+                    }
                     // Mostra lista delle classi disponibili
                     System.out.println("Classi disponibili:");
                     for (ClassSection cs : classSectionRepo.findAll()) {
@@ -289,7 +307,7 @@ public class App {
                         break;
                     }
                     // Crea e salva il nuovo studente
-                    Student stud = new Student(name, surname);
+                    Student stud = new Student(name, surname, gender);
                     stud.setClassSection(classe);
                     studentRepo.save(stud);
                     System.out.println("Studente aggiunto con successo.");
@@ -392,7 +410,7 @@ public class App {
 
     // Sotto-menù per TestFisici
     private static void menuTestFisici(Scanner scanner,
-                                       PhysicalTestRepository testDisciplineRepo,
+                                       PhysicalTestRepository physicalTestRepo,
                                        SportCategoryRepository sportCategoryRepo,
                                        ClassSectionRepository classSectionRepo,
                                        ScoreRepository scoreRepo) {
@@ -461,11 +479,11 @@ public class App {
                     test.setSportCategory(disciplina);
                     test.setClassSection(sezione);
                     test.setTestDate(testDate);
-                    testDisciplineRepo.save(test);
+                    physicalTestRepo.save(test);
                     System.out.println("Test fisico aggiunto con successo.");
                     break;
                 case 2:
-                    for (PhysicalTest t : testDisciplineRepo.findAll()) {
+                    for (PhysicalTest t : physicalTestRepo.findAll()) {
                         System.out.println(
                                 t.getId() + ": " +
                                         t.getDescription() + // aggiungi campo description/testName se manca!
@@ -491,7 +509,7 @@ public class App {
                         break;
                     }
                     try{
-                        testDisciplineRepo.delete(idToDel);
+                        physicalTestRepo.delete(idToDel);
                         System.out.println("Test fisico eliminato con successo.");
                     } catch (Exception e) {
                         System.out.println("Errore durante l'eliminazione del test fisico: " + e.getMessage());
@@ -510,7 +528,9 @@ public class App {
     private static void menuPunteggiDiscipline(Scanner scanner,
                                                ScoreRepository scoreRepo,
                                                StudentRepository studentRepo,
-                                               PhysicalTestRepository testDisciplineRepo) {
+                                               PhysicalTestRepository physicalTestRepo,
+                                               ScoreService scoreService,
+                                               EntityManager em) {
         boolean running = true;
         while (running) {
             System.out.println("----- Gestione Voti dei Test -----");
@@ -538,25 +558,25 @@ public class App {
                     }
                     // 2. SCEGLI TEST FISICO
                     System.out.println("Test Fisici disponibili:");
-                    for (PhysicalTest t : testDisciplineRepo.findAll()) {
+                    for (PhysicalTest t : physicalTestRepo.findAll()) {
                         System.out.println(t.getId() + ": " + t.getDescription());
                     }
                     System.out.print("ID Test Fisico: ");
                     Long testId = Long.parseLong(scanner.nextLine());
-                    PhysicalTest test = testDisciplineRepo.findById(testId);
+                    PhysicalTest test = physicalTestRepo.findById(testId);
                     if (test == null) {
                         System.out.println("Test fisico non trovato!");
                         break;
                     }
                     // 3. INSERISCI PUNTEGGIO
-                    System.out.print("Punteggio: ");
-                    Double value = Double.parseDouble(scanner.nextLine());
-                    Score score = new Score();
-                    score.setStudent(studente);
-                    score.setTestDiscipline(test);
-                    score.setValue(value);
-                    scoreRepo.save(score);
-                    System.out.println("Voto del test aggiunto con successo.");
+                    System.out.print("Risultato grezzo (es. metri, ripetizioni, secondi...): ");
+                    double valore = Double.parseDouble(scanner.nextLine());
+                    try {
+                        Score score = scoreService.aggiungiScore(studente, test, valore, em);
+                        System.out.println("Risultato salvato. Il voto calcolato è: " + score.getVoto());
+                    } catch (IllegalStateException ex) {
+                        System.out.println("Errore: " + ex.getMessage());
+                    }
                     break;
                 case 2:
                     System.out.println("Tutti i voti dei test:");
@@ -564,8 +584,9 @@ public class App {
                         System.out.println(
                                 "ID: " + s.getId() +
                                         " | Studente: " + s.getStudent().getFirstName() + " " + s.getStudent().getLastName() +
-                                        " | Test: " + s.getTestDiscipline().getDescription() +
-                                        " | Punteggio: " + s.getValue()
+                                        " | Test: " + s.getPhysicalTest().getDescription() +
+                                        " | Punteggio: " + s.getValue() +
+                                        " | Voto: " + s.getVoto()
                         );
                     }
                     break;
@@ -582,7 +603,7 @@ public class App {
     private static void menuStatistichePunteggi(Scanner scanner,
                                                 ScoreRepository scoreRepo,
                                                 StudentRepository studentRepo,
-                                                PhysicalTestRepository testDisciplineRepo) {
+                                                PhysicalTestRepository physicalTestRepo) {
         boolean running = true;
         while (running) {
             System.out.println("----- Statistiche e Visualizzazione Voti -----");
@@ -599,14 +620,16 @@ public class App {
             // Switch per gestione menù Statistiche e Visualizzazioni voti
             switch (choice) {
                 case 1:
+
                     System.out.println("Tutti i punteggi:");
                     for (Score s : scoreRepo.findAll()) {
                         System.out.println(
                                 "ID: " + s.getId() +
                                         " | Studente: " + s.getStudent().getFirstName() + " " + s.getStudent().getLastName() +
-                                        " | Test: " + s.getTestDiscipline().getDescription() +
-                                        " | Disciplina: " + s.getTestDiscipline().getSportCategory().getDescription() +
-                                        " | Punteggio: " + s.getValue()
+                                        " | Test: " + s.getPhysicalTest().getDescription() +
+                                        " | Disciplina: " + s.getPhysicalTest().getSportCategory().getDescription() +
+                                        " | Punteggio: " + s.getValue() +
+                                        " | Voto: " + s.getVoto()
                         );
                     }
                     break;
@@ -621,7 +644,7 @@ public class App {
                     break;
                 case 3:
                     System.out.println("Medie voti per test:");
-                    for (PhysicalTest test : testDisciplineRepo.findAll()) {
+                    for (PhysicalTest test : physicalTestRepo.findAll()) {
                         List<Score> voti = scoreRepo.findByPhysicalTestId(test.getId()); // DA AGGIUNGERE IN REPO!
                         double media = voti.isEmpty() ? 0 :
                                 voti.stream().mapToDouble(Score::getValue).average().orElse(0);
@@ -636,21 +659,23 @@ public class App {
                     List<Score> votiStudente = scoreRepo.findByStudentId(studentId); // DA AGGIUNGERE IN REPO!
                     for (Score s : votiStudente) {
                         System.out.println(
-                                "Test: " + s.getTestDiscipline().getDescription() +
-                                        " | Punteggio: " + s.getValue()
+                                "Test: " + s.getPhysicalTest().getDescription() +
+                                        " | Punteggio: " + s.getValue() +
+                                        " | Voto: " + s.getVoto()
                         );
                     }
                     break;
                 case 5:
                     System.out.println("Scegli ID test per vedere tutti i voti:");
-                    for (PhysicalTest test : testDisciplineRepo.findAll())
+                    for (PhysicalTest test : physicalTestRepo.findAll())
                         System.out.println(test.getId() + ": " + test.getDescription());
                     Long testId = Long.parseLong(scanner.nextLine());
                     List<Score> votiTest = scoreRepo.findByPhysicalTestId(testId); // DA AGGIUNGERE IN REPO!
                     for (Score s : votiTest) {
                         System.out.println(
                                 "Studente: " + s.getStudent().getFirstName() + " " + s.getStudent().getLastName() +
-                                        " | Punteggio: " + s.getValue()
+                                        " | Punteggio: " + s.getValue() +
+                                        " | Voto: " + s.getVoto()
                         );
                     }
                     break;
@@ -659,6 +684,87 @@ public class App {
                     break;
                 default:
                     System.out.println("Opzione non valida.");
+            }
+        }
+    }
+    // Menu per Gestione delle Fasce di Valutazione
+    private static void menuFasceValutazione(Scanner scanner,
+                                             GradingScaleRepository gradingScaleRepo,
+                                             PhysicalTestRepository physicalTestRepo,
+                                             EntityManager em) {
+        boolean running = true;
+        while (running) {
+            System.out.println("----- Gestione Fasce di Valutazione -----");
+            System.out.println("1. Aggiungi Fascia");
+            System.out.println("2. Visualizza Fasce per Test");
+            System.out.println("3. Cancella Fascia");
+            System.out.println("0. Torna al Menu Principale");
+            System.out.print("Seleziona un'opzione: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    // Scegli test fisico
+                    System.out.println("Test fisici disponibili:");
+                    for (PhysicalTest t : physicalTestRepo.findAll()) {
+                        System.out.println(t.getId() + ": " + t.getDescription());
+                    }
+                    System.out.print("ID del test fisico: ");
+                    long testId = Long.parseLong(scanner.nextLine());
+                    PhysicalTest physicalTest = physicalTestRepo.findById(testId);
+                    if (physicalTest == null) {
+                        System.out.println("Test non trovato!");
+                        break;
+                    }
+                    // Scegli genere
+                    System.out.print("Genere (M/F): ");
+                    String gen = scanner.nextLine().trim().toUpperCase();
+                    Gender gender;
+                    try {
+                        gender = Gender.valueOf(gen.equals("F") ? "F" : "M");
+                    } catch (Exception e) {
+                        System.out.println("Genere non valido.");
+                        break;
+                    }
+                    // Range minimo, massimo, voto
+                    System.out.print("Valore MIN: ");
+                    double min = Double.parseDouble(scanner.nextLine());
+                    System.out.print("Valore MAX: ");
+                    double max = Double.parseDouble(scanner.nextLine());
+                    System.out.print("Voto associato: ");
+                    int voto = Integer.parseInt(scanner.nextLine());
+                    GradingScale gs = new GradingScale(physicalTest, gender, min, max, voto);
+                    gradingScaleRepo.save(gs, em);
+                    System.out.println("Fascia aggiunta con successo!");
+                    break;
+                case 2:
+                    System.out.println("ID test fisico per cui vedere le fasce:");
+                    for (PhysicalTest t : physicalTestRepo.findAll())
+                        System.out.println(t.getId() + ": " + t.getDescription());
+                    long tId = Long.parseLong(scanner.nextLine());
+                    PhysicalTest test = physicalTestRepo.findById(tId);
+                    if (test == null) {
+                        System.out.println("Test non valido.");
+                        break;
+                    }
+                    for (Gender g : Gender.values()) {
+                        System.out.println("Fasce per " + g + ":");
+                        for (GradingScale fascia : gradingScaleRepo.findByPhysicalTestAndGender(test, g, em)) {
+                            System.out.printf("Min: %.2f  Max: %.2f  Voto: %d\n",
+                                    fascia.getMinValue(), fascia.getMaxValue(), fascia.getVoto());
+                        }
+                    }
+                    break;
+                case 3:
+                    // Cancellazione fascia (non implementata)
+                    System.out.println("Cancellazione diretta di una fascia non implementata qui.");
+                    break;
+                case 0:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Opzione non valida. Riprova.");
             }
         }
     }
