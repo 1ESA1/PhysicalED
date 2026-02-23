@@ -1,4 +1,4 @@
 package com.PhysicalED.gui;
 
-public class SchoolYearController {
+public class SchoolYearViewController {
 }
