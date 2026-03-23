@@ -30,3 +30,27 @@ nbdist/
 
 ### Mac OS ###
 .DS_Store
+
+### Local databases / backups (SQLite) ###
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.bak
+*.bak.*
+
+### Logs / runtime files ###
+*.log
+logs/
+*.pid
+*.hprof
+*.tmp
+*.swp
+
+### Env files (keep templates) ###
+.env
+.env.*
+!.env.example
+

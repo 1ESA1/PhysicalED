@@ -2,10 +2,9 @@ package com.PhysicalED.service;
 
 import com.PhysicalED.model.Gender;
 import com.PhysicalED.model.GradingScale;
-import com.PhysicalED.model.PhysicalTest;
+import com.PhysicalED.model.SpecialtyEntity;
 import com.PhysicalED.repo.GradingScaleRepository;
 
-import jakarta.persistence.*;
 import java.util.List;
 
 public class GradingService {
@@ -17,18 +16,25 @@ public class GradingService {
     }
 
     /**
-     * Calcola e restituisce il voto sulla base delle fasce salvate per il test, sesso e punteggio.
+     * Calcola e restituisce il voto sulla base delle fasce salvate per la specialità, sesso e punteggio.
      */
-    public int calcolaVoto(PhysicalTest physicalTest, Gender gender, double valore, EntityManager em) {
-        List<GradingScale> fasce = gradingScaleRepository.findByPhysicalTestAndGender(physicalTest, gender, em);
-        if (fasce.isEmpty()) {
-            throw new IllegalStateException("⚠️ Nessuna fascia di valutazione per questo test/genere.");
+    public int calcolaVoto(SpecialtyEntity specialty, Gender gender, double valore) {
+        List<GradingScale> fasce = gradingScaleRepository.findBySpecialtyAndGender(specialty, gender);
+        return calcolaVotoDaFasce(fasce, valore);
+    }
+
+    /**
+     * Variante pura (senza DB) per riuso e test unitari.
+     */
+    int calcolaVotoDaFasce(List<GradingScale> fasce, double valore) {
+        if (fasce == null || fasce.isEmpty()) {
+            throw new IllegalStateException("Nessuna fascia di valutazione disponibile.");
         }
         for (GradingScale gs : fasce) {
             if (valore >= gs.getMinValue() && valore < gs.getMaxValue()) {
                 return gs.getVoto();
             }
         }
-        throw new IllegalStateException("‼️ Il valore inserito non rientra in nessuna fascia di valutazione!");
+        throw new IllegalStateException("Il valore inserito non rientra in nessuna fascia di valutazione.");
     }
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="12" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      alignment="TOP_CENTER" fx:controller="com.PhysicalED.gui.GradingScaleController">
+
+    <padding>
+        <Insets top="12" right="12" bottom="12" left="12"/>
+    </padding>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button text="⬅ Torna a Specialità" onAction="#handleBackToSpecialty" />
+        <Label text="Fasce di Valutazione" style="-fx-font-size: 16;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Label fx:id="lblEsito" style="-fx-text-fill: #00796B;"/>
+    </HBox>
+
+    <FlowPane hgap="10" vgap="8" prefWrapLength="980">
+        <Label text="Specialità:"/>
+        <ComboBox fx:id="comboTest" prefWidth="240"/>
+
+        <Label text="Genere:"/>
+        <ComboBox fx:id="comboGender" prefWidth="120"/>
+
+        <Label text="Min:"/>
+        <TextField fx:id="txtMin" promptText="0" prefColumnCount="6"/>
+
+        <Label text="Max:"/>
+        <TextField fx:id="txtMax" promptText="10" prefColumnCount="6"/>
+
+        <Label text="Voto:"/>
+        <TextField fx:id="txtVoto" promptText="6" prefColumnCount="4"/>
+
+        <Button text="Aggiungi" onAction="#handleAggiungi"/>
+    </FlowPane>
+
+    <TableView fx:id="tblScale" prefHeight="380" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colTest" text="Specialità" prefWidth="260"/>
+            <TableColumn fx:id="colGender" text="Genere" prefWidth="90"/>
+            <TableColumn fx:id="colRange" text="Range" prefWidth="180"/>
+            <TableColumn fx:id="colVoto" text="Voto" prefWidth="80"/>
+        </columns>
+    </TableView>
+
+    <Button text="Rimuovi selezionata" onAction="#handleRimuovi"/>
+</VBox>

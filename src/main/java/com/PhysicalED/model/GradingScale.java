@@ -1,6 +1,6 @@
 package com.PhysicalED.model;
 /*
- * Entity representing the grading scale for physical tests based
+ * Entity representing the grading scale for a specialty.
  */
 import jakarta.persistence.*;
 
@@ -12,8 +12,8 @@ public class GradingScale {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "physical_test_id")
-    private PhysicalTest physicalTest;
+    @JoinColumn(name = "speciality_id")
+    private SpecialtyEntity specialty;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", length = 1, nullable = false)
@@ -30,18 +30,17 @@ public class GradingScale {
 
     public GradingScale() {}
 
-    public GradingScale(PhysicalTest physicalTest, Gender gender, Double minValue, Double maxValue, Integer voto) {
-        this.physicalTest = physicalTest;
+    public GradingScale(SpecialtyEntity specialty, Gender gender, Double minValue, Double maxValue, Integer voto) {
+        this.specialty = specialty;
         this.gender = gender;
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.voto = voto;
     }
 
-    // Getters & Setters...
     public Long getId() { return id; }
-    public PhysicalTest getPhysicalTest() { return physicalTest; }
-    public void setPhysicalTest(PhysicalTest physicalTest) { this.physicalTest = physicalTest; }
+    public SpecialtyEntity getSpecialty() { return specialty; }
+    public void setSpecialty(SpecialtyEntity specialty) { this.specialty = specialty; }
     public Gender getGender() { return gender; }
     public void setGender(Gender gender) { this.gender = gender; }
     public Double getMinValue() { return minValue; }

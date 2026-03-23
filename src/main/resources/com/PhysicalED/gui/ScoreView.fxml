@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="12" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      alignment="TOP_CENTER" fx:controller="com.PhysicalED.gui.ScoreController">
+
+    <padding>
+        <Insets top="12" right="12" bottom="12" left="12"/>
+    </padding>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Punteggi" style="-fx-font-size: 16;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Label fx:id="lblEsito" style="-fx-text-fill: #00796B;"/>
+    </HBox>
+
+    <FlowPane hgap="10" vgap="8" prefWrapLength="980">
+        <Label text="Studente:"/>
+        <ComboBox fx:id="comboStudente" prefWidth="240"/>
+
+        <Label text="Specialità:"/>
+        <ComboBox fx:id="comboTest" prefWidth="240"/>
+
+        <Label text="Valore:"/>
+        <TextField fx:id="txtValore" promptText="12.5" prefColumnCount="6"/>
+
+        <Button text="Aggiungi" onAction="#handleAggiungi"/>
+    </FlowPane>
+
+    <TableView fx:id="tblScore" prefHeight="380" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colStudente" text="Studente" prefWidth="240"/>
+            <TableColumn fx:id="colTest" text="Specialità" prefWidth="260"/>
+            <TableColumn fx:id="colValore" text="Valore" prefWidth="90"/>
+            <TableColumn fx:id="colVoto" text="Voto" prefWidth="70"/>
+        </columns>
+    </TableView>
+
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Button text="Rimuovi selezionato" onAction="#handleRimuovi"/>
+    </HBox>
+</VBox>

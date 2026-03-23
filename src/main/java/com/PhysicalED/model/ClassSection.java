@@ -45,4 +45,10 @@ public class ClassSection {
     public void setSchoolYear(SchoolYear schoolYear) {
         this.schoolYear = schoolYear;
     }
+
+    @Override
+    public String toString() {
+        String sy = schoolYear != null ? schoolYear.getDescription() : "";
+        return sy.isBlank() ? name : name + " (" + sy + ")";
+    }
 }

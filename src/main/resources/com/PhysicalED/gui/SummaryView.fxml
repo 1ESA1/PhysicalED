@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.PhysicalED.gui.SummaryController">
+
+    <padding>
+        <Insets top="12" right="12" bottom="12" left="12"/>
+    </padding>
+
+    <Label text="Riepilogo" style="-fx-font-size: 16; -fx-font-weight: bold;" />
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Filtro Studente:"/>
+        <ComboBox fx:id="comboStudente" prefWidth="260" promptText="Tutti" />
+        <Button text="Aggiorna" onAction="#handleRefresh" />
+        <Label fx:id="lblInfo" />
+    </HBox>
+
+    <TableView fx:id="tblSummary" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colStudente" text="Studente" prefWidth="260"/>
+            <TableColumn fx:id="colNumTest" text="# Specialità" prefWidth="110"/>
+            <TableColumn fx:id="colMedia" text="Media Voti" prefWidth="110"/>
+        </columns>
+    </TableView>
+
+</VBox>
+

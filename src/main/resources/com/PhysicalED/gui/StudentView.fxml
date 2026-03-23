@@ -1,32 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <VBox spacing="12" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      alignment="TOP_CENTER" fx:controller="com.PhysicalED.gui.StudentiViewController">
+      alignment="TOP_CENTER" fx:controller="com.PhysicalED.gui.StudentController">
+
+    <padding>
+        <Insets top="12" right="12" bottom="12" left="12"/>
+    </padding>
+
     <Label text="Gestione Studenti" style="-fx-font-size: 16;" />
-    <HBox spacing="10">
-        <Label text="Nome:"/>
-        <TextField fx:id="txtNome"/>
-        <Label text="Cognome:"/>
-        <TextField fx:id="txtCognome"/>
-        <Label text="Genere:"/>
-        <ComboBox fx:id="comboGenere"/>
-        <Label text="Classe:"/>
-        <ComboBox fx:id="comboClasse"/>
-        <Button text="Aggiungi" onAction="#handleAggiungiStudente"/>
-    </HBox>
-    <TableView fx:id="tblStudenti" prefHeight="300" prefWidth="700">
-        <columns>
-            <TableColumn fx:id="colNome" text="Nome" prefWidth="120"/>
-            <TableColumn fx:id="colCognome" text="Cognome" prefWidth="150"/>
-            <TableColumn fx:id="colGenere" text="Genere" prefWidth="80"/>
-            <TableColumn fx:id="colClasse" text="Classe" prefWidth="100"/>
-        </columns>
-    </TableView>
-    <HBox alignment="CENTER_RIGHT" spacing="10">
-        <Button text="Rimuovi selezionato" onAction="#handleRimuoviStudente"/>
-        <Label fx:id="lblEsito" style="-fx-text-fill: #00796B;"/>
-    </HBox>
+
+    <Label fx:id="lblEsito" wrapText="true"
+           text="Gestione studenti disponibile in: Classi → (doppio click) → Studenti" />
 </VBox>

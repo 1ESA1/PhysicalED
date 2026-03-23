@@ -12,17 +12,18 @@
                BorderPane.alignment="CENTER"/>
     </top>
     <left>
-        <VBox spacing="12" style="-fx-background-color: #eeeeee; -fx-padding: 12;">
-            <Button fx:id="btnYears" text="Anni scolastici"/>
-            <Button fx:id="btnClasses" text="Classi"/>
-            <Button fx:id="btnStudents" text="Studenti"/>
-            <Button fx:id="btnSport" text="Sport"/>
-            <Button fx:id="btnScore" text="Score"/>
+        <VBox spacing="10" style="-fx-background-color: #eeeeee; -fx-padding: 12;">
+            <Label text="Dati" style="-fx-font-weight: bold;" />
+            <Button fx:id="btnYears" text="Anni" maxWidth="Infinity"/>
+            <Button fx:id="btnClasses" text="Classi" maxWidth="Infinity"/>
+            <Separator/>
+            <Label text="Valutazioni" style="-fx-font-weight: bold;" />
+            <Button fx:id="btnSport" text="Sport" maxWidth="Infinity"/>
+            <Button fx:id="btnScores" text="Punteggi" maxWidth="Infinity"/>
+            <Button fx:id="btnSummary" text="Riepilogo" maxWidth="Infinity"/>
         </VBox>
     </left>
     <center>
-        <StackPane fx:id="mainPanel">
-            <Label fx:id="lblWelcome" text="Benvenuto su PhysicalED!" />
-        </StackPane>
+        <StackPane fx:id="mainPanel"/>
     </center>
 </BorderPane>

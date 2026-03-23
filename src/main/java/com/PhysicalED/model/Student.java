@@ -74,4 +74,11 @@ public class Student {
     public void setClassSection(ClassSection classSection) {
         this.classSection = classSection;
     }
+
+    @Override
+    public String toString() {
+        String cls = classSection != null ? classSection.getName() : "";
+        String base = lastName + " " + firstName;
+        return cls.isBlank() ? base : base + " - " + cls;
+    }
 }

@@ -2,7 +2,7 @@ package com.PhysicalED.model;
 import jakarta.persistence.*;
 
 /**
- * Score entity representing a student's score in a specific test discipline.
+ * Score entity representing a student's score in a specific specialty.
  */
 @Entity
 @Table(name = "score") // Table name in the db
@@ -13,8 +13,8 @@ public class Score {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "physical_test_id", nullable = false)
-    private PhysicalTest physicalTest;
+    @JoinColumn(name = "speciality_id", nullable = false)
+    private SpecialtyEntity specialty;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
@@ -28,8 +28,8 @@ public class Score {
 
     // Constructor
     public Score() {}
-    public Score(PhysicalTest physicalTest, Student student, Double value, Integer voto) {
-        this.physicalTest = physicalTest;
+    public Score(SpecialtyEntity specialty, Student student, Double value, Integer voto) {
+        this.specialty = specialty;
         this.student = student;
         this.value = value;
         this.voto = voto;
@@ -43,11 +43,11 @@ public class Score {
         this.id = id;
     }
 
-    public PhysicalTest getPhysicalTest() {
-        return physicalTest;
+    public SpecialtyEntity getSpecialty() {
+        return specialty;
     }
-    public void setPhysicalTest(PhysicalTest physicalTest) {
-        this.physicalTest = physicalTest;
+    public void setSpecialty(SpecialtyEntity specialty) {
+        this.specialty = specialty;
     }
 
     public Student getStudent() {
