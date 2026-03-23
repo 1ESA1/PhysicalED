@@ -1,5 +1,8 @@
 # PhysicalED (JavaFX + JPA/Hibernate + SQLite)
 
+[![Repository](https://img.shields.io/badge/GitHub-Repository-black)](https://github.com/1ESA1/PhysicalED)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 PhysicalED è una piccola applicazione **desktop** per la gestione della valutazione in educazione fisica.
 L'obiettivo è permettere la **raccolta dei risultati delle prove** degli studenti e produrre un **riepilogo** facilmente consultabile.
 
@@ -144,3 +147,7 @@ Se una schermata non si carica:
 
 - `target/`, `.idea/`, `*.iml` e i file `*.db`/`*.bak*` sono ignorati via `.gitignore`.
 - I warning IDE su campi `@FXML` "never assigned" sono attesi (iniezione runtime via `FXMLLoader`).
+
+## Licenza
+
+Questo progetto è distribuito sotto licenza **MIT**. Vedi il file [`LICENSE`](LICENSE).
